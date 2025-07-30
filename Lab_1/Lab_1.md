@@ -29,7 +29,10 @@ The course text book discusses many different sensor types based on what physica
 Fundamentally, a measurement systems is comprised of a sensor, a variable conversion element, and some sort of device used to process the information known as a signal processor. Figure 1.1 in the book givens a schematic view of a measurement system. In this class, you will work with a variety of sensors, construct a variable conversion element and program a signal processor to record data. For this lab, the sensor you use will be a thermistor, the variable conversion unit will consist of a voltage divider, and the signal processor will be an Arduino micro controller. The breadboard view for this system is shown in Figure 1 [ [Fritzing.org](https://fritzing.org/) ] and the wiring schematic is shown in Figure 2. </div>
 
 <figure>
-  <img src="Thermistor_Wiring_rev2.png" alt="Example image" width="400" height="400">
+  <img src="Thermistor_Wiring_rev2.png" alt="Example image" width: 100%;
+  height: auto;
+  /* Magic! */
+  max-width: 50vw;>
   <figcaption>Figure 1. A breadboard schematic of the measurement system used in Aero 3320. Wiring Diagram created using Fritzing.  </figcaption>
 </figure>
 
