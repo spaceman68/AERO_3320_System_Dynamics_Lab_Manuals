@@ -54,5 +54,10 @@ As discussed in Chapter 2, instruments (or sensors) can be described using sever
 - Indicators and Instruments with Signal Output
 - Smart and Nonsmart
 
-<div style="text-align: justify"> The course textbook gives a good overview of these terms. On important concept to consider, is that almost all modern sensing systems, the instrument signal is converted into a digital signal regardless if the sensor is analog or digital. In fact, many sensors are available with a signal processor built onto the PCB. These sensors are often referred to as ‘digital’ sensors, but they are not digital with respect to how the term is defined here. When a sensor is referred to as ‘digital’ it is a reference to the type of sensor interface. Interfaces are discussed below. </div> 
+<div style="text-align: justify"> The course textbook gives a good overview of these terms. On important concept to consider, is that almost all modern sensing systems, the instrument signal is converted into a digital signal regardless if the sensor is analog or digital. In fact, many sensors are available with a signal processor built onto the PCB. These sensors are often referred to as ‘digital’ sensors, but they are not digital with respect to how the term is defined here. When a sensor is referred to as ‘digital’ it is a reference to the type of sensor interface. Interfaces are discussed below. Interfaces are discussed below. For example, see the glossary of terms section on this discussion from Sparkfun regarding accelerometers, rate gyros and IMUs.
+[ [Sparkfun Accelerometer Wiki](https://www.sparkfun.com/accel-gyro-guide) ]
+
+
+
+ </div> 
 
