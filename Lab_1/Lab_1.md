@@ -1,8 +1,12 @@
 # AERO 3320 System Dynamics
 
-Contact: Stephen Thiam-Choy Kwok-Choon
+Maintenance: Stephen Thiam-Choy Kwok-Choon
 
 Email: skwokcho@calpoly.edu
+
+Original Author: Leonardo Torres
+
+
 
 # Lab 1 Sensor Characterization and Calibration
 
@@ -206,7 +210,7 @@ Combining Equations (1) and (2), we get,
 
 $$
 \begin{equation}
-𝐴𝐷𝐶=1023 \frac {𝑅𝑇}{𝑅𝑇+𝑅} \frac {𝑉𝑐𝑐}{𝑉_{𝑎𝑟𝑒𝑓}}
+𝐴𝐷𝐶=1023 \frac {𝑅_𝑇}{𝑅_𝑇+𝑅} \frac {𝑉_{𝑐𝑐}}{𝑉_{𝑎𝑟𝑒𝑓}}
 \end{equation}
 $$
 
@@ -214,7 +218,66 @@ Notice the analog to digital conversions are dependent on the system voltage. On
 
 $$
 \begin{equation}
-𝐴𝐷𝐶=1023 \frac {𝑅𝑇}{𝑅𝑇+𝑅}
+𝐴𝐷𝐶=1023 \frac {𝑅_𝑇}{𝑅_𝑇+𝑅}
 \end{equation}
 $$
 On the other hand, if we use $𝑉_{𝑐𝑐}=3.3𝑉$ or $𝑉_{𝑐𝑐}=𝑉_{𝑖𝑛}$, the ADC reading would need to be scaled appropriately.
+
+
+<div style="color:black; background:lightyellow; border: 1px dashed black">
+
+
+Example: If you setup a voltage divider with $𝑅_{𝑇}=𝑅$ and $𝑉_{𝑐𝑐}=3.3𝑉$ what is the analog voltage measured, $𝑉_{0}$, and what is the equivalent ADC Reading?
+
+Solution: In this case, since $𝑅_{𝑇}=𝑅$ we would expect to measure half the voltage supplied to the voltage divider based on Equation 1. Hence, 
+
+$$
+\begin{equation}
+𝑉_0=\frac{𝑅_𝑇}{𝑅_𝑇+𝑅} 𝑉_{𝑐𝑐}=\frac{3.3𝑉}{2}=1.65𝑉 
+\end{equation}
+$$
+
+Using Equation (3) the ADC Reading becomes:
+
+$$
+\begin{equation}
+
+ 𝐴𝐷𝐶=1023 \frac{𝑅_𝑇}{𝑅_𝑇+𝑅} \frac{𝑉_{𝑐𝑐}}{𝑉_{𝑎𝑟𝑒𝑓}} = \frac{1023}{2} \frac{3.3}{5}=337.59 
+
+\end{equation}
+$$
+
+ In this case, we can only measure integer values so the Arduino platform reads either 337 or 338. In fact, the Arduino should read 337, 59% of the time.
+
+ </div>
+
+
+ Finally, we can use the ADC Reading to determine the resistance of the thermistor by solving Equation (4) for 𝑅𝑇.
+
+$$
+\begin{equation}
+𝑅_𝑇= \frac {𝑅}{ \frac{1023}{𝐴𝐷𝐶}−1}
+\end{equation}
+$$
+
+#### 2.5.2 Quantization Error
+
+The difference between an input value and its quantized value (such as round-off error) is referred to as quantization error. A device or algorithmic function that performs quantization is called a quantizer. An analog-to-digital converter is an example of a quantizer.
+
+
+<figure>
+  <img src="quantized_signal.jpeg" alt="An example of an original signal, quantized signal and noise" width: 100%;
+  height: auto;
+  /* Magic! */
+  max-width: 50vw;>
+  <figcaption>Figure 2. Wiring schematic of the Arduino Uno (Rev3) Platform. Wiring Diagram created using Fritzing.  </figcaption>
+</figure>
+
+
+
+
+The simplest way to quantize a signal is to choose the digital amplitude value closest to the original analog amplitude. This example shows the original analog signal (green), the quantized signal (black dots), the signal reconstructed from the quantized signal (yellow) and the difference between the original signal and the reconstructed signal (red). The difference between the original signal and the reconstructed signal is the quantization error and, in this simple quantization scheme, is a deterministic function of the input signal.
+
+An ADC can be modeled as two processes: sampling and quantization. Sampling converts a voltage signal (function of time) into a discrete-time signal (sequence of real numbers). Quantization replaces each real number with an approximation from a finite set of discrete values (levels), which is necessary for storage and processing by numerical methods. Most commonly, these discrete values are represented as fixed-point words (either proportional to the waveform values or compounded) or floating-point words. Common word-lengths are 8-bit (256 levels), 16-bit (65,536 levels), 32-bit (4.3 billion levels), and so on, though any number of quantization levels is possible (not just powers of two). Quantizing a sequence of numbers produces a sequence of quantization errors which is sometimes modeled as an additive random signal called quantization noise because of its stochastic behavior. The more levels a quantizer uses, the lower is its quantization noise power.
+
+In general, both ADC processes lose some information. As such, discrete-valued signals are only an approximation of the continuous-valued discrete-time signal, which is itself only an approximation of the original continuous-valued continuous-time signal. But both types of approximation errors can, in theory, be made arbitrarily small by good design
