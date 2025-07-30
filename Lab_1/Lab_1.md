@@ -1,6 +1,8 @@
 # AERO 3320 System Dynamics
 
-Author: Stephen Thiam-Choy Kwok-Choon
+Contact: Stephen Thiam-Choy Kwok-Choon
+
+Email: skwokcho@calpoly.edu
 
 # Lab 1 Sensor Characterization and Calibration
 
@@ -89,7 +91,7 @@ One issue that will come up is what’s known as type conversion: https://en.wik
 
 For example, if type: </div>
 
-<div style="color:black; background:lightblue">
+<div style="color:black; background:lightblue; border: 1px dashed black">
 
 ``` 
 int adc = 600; 
@@ -98,3 +100,31 @@ int val = 1023/adc;
 </div>
 
 
+<div style="text-align: justify"> The value stored in val is 1, not 1.705. How do we fix this? There are a few options which all involve converting one of the variables on the right-hand side to a float, and, we have to store val as a float. The following examples will get the desired result:
+</div>
+
+<div style="color:black; background:lightblue; border: 1px dashed black">
+
+```
+ int adc = 600; 
+float val = 1023./adc; 
+
+or 
+
+float adc = 600; 
+float val = 1023/adc;
+``` 
+</div>
+
+<div style="text-align: justify"> 
+Using 1023. instead of 1023 tells the complier that 1023 is a float. It then converts adc to a float and returns and stores the result as a float. Using the ‘.’ in C is not the same as the ‘.’ in Matlab. In the other example, adc is defined as a float and the compiler converts 1023 to a float and calculates and stores the result as a float. The rules of type conversion are standardized and different for different types of variables.
+
+Why is this an issue? Balance memory and computation with performance.
+
+There are many tools available to develop code for the Arduino. These tools are known as Integrated Development Environments (IDEs) because the handle text editing, compiling the code and exporting the executable. The Arduino IDE is available here: https://www.arduino.cc/en/Main/Software.
+
+In the case of the Arduino, the C code you write is compiled and then ‘ported’ or transferred to the Arduino microcontroller as machine code. The code you write begins running the instant power is supplied to the Arduino.
+In this class, we will use the Elegoo Uno. The Uno is a very popular version of the Arduino when a vast community of both hardware and software developers. To learn more, check out the Arduino website https://www.arduino.cc/en/Guide/HomePage.
+
+As you go through this course, please keep in mind that the Arduino platform is by no means the ‘best’ signal processor for all applications. However, the Arduino is a very good example of the key features of a signal processing system. There are other tool developers out there see for example, National Instruments, dSpace, and Texas Instruments and for many applications, custom systems are required.
+ </div> 
