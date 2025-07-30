@@ -124,7 +124,50 @@ Why is this an issue? Balance memory and computation with performance.
 There are many tools available to develop code for the Arduino. These tools are known as Integrated Development Environments (IDEs) because the handle text editing, compiling the code and exporting the executable. The Arduino IDE is available here: https://www.arduino.cc/en/Main/Software.
 
 In the case of the Arduino, the C code you write is compiled and then ‘ported’ or transferred to the Arduino microcontroller as machine code. The code you write begins running the instant power is supplied to the Arduino.
-In this class, we will use the Elegoo Uno. The Uno is a very popular version of the Arduino when a vast community of both hardware and software developers. To learn more, check out the Arduino website https://www.arduino.cc/en/Guide/HomePage.
+In this class, we will use the Elegoo Uno. The Uno is a very popular version of the Arduino when a vast community of both hardware and software developers. To learn more, check out the Arduino website [ https://www.arduino.cc/en/Guide/HomePage. ]
 
-As you go through this course, please keep in mind that the Arduino platform is by no means the ‘best’ signal processor for all applications. However, the Arduino is a very good example of the key features of a signal processing system. There are other tool developers out there see for example, National Instruments, dSpace, and Texas Instruments and for many applications, custom systems are required.
+As you go through this course, please keep in mind that the Arduino platform is by no means the ‘best’ signal processor for all applications. However, the Arduino is a very good example of the key features of a signal processing system. There are other tool developers out there see for example, National Instruments [https://www.ni.com/en.html], dSpace [https://www.dspace.com/en/inc/home/products/products.cfm?] , and Texas Instruments [ https://www.ti.com/ ]  and for many applications, custom systems are required.
  </div> 
+
+### 2.4 Getting Data from Arduino
+
+<div style="text-align: justify"> 
+Regardless of how simple or complex you want your Arduino program to be, two function are required: setup() and loop(). The setup() function runs once when the Arduino first gets power. This is code you want to run once. The loop() function runs after the setup() function and, as the name suggests, runs over and over until the power to the Arduino is removed.
+The code snippet below is an example of how to take an analog reading and send the reading back to the ‘serial monitor’.
+</div>
+
+<div style="color:black; background:lightblue; border: 1px dashed black">
+
+``` 
+int analogPin = 3;  // potentiometer wiper (middle terminal) 
+                    // connected to analog pin 3 
+                    // outside leads to ground and +5V 
+int val = 0;        // variable to store the value read 
+void setup() 
+{ 
+  Serial.begin(9600);           // setup serial 
+}
+  
+void loop()
+{
+  val = analogRead(analogPin);  // read the input pin 
+  Serial.println(val);          // debug value 
+}
+```
+ </div>
+
+
+<div style="text-align: justify"> 
+A few general comments. The ‘//’ is how you write a comment line in C. In C, all lines of code must end with a semicolon. Notice there are two lines of code before the setup() function. These lines of code define two variables of type int (or integer). These variables are available to all functions in this code. The term void is the type of variable the function returns. In C we use the term void to mean nothing. In other words, the functions setup() and loop() do not return a variable.
+
+The first two lines of code define the analog pin we are going to use to read data, and the variable we are going to use to store the analog data. In C, all variables must be defined before they can be used. In the above code, both variables are defined AND initialized. Initialization is not required but is considered good practice. These variables are accessible in all functions within the Arduino code. This
+idea is known as variable scope. If a variable is defined in the function setup() it is not available for use in loop() because that variable is only in scope in the function setup().
+
+The first and only line of code in the setup() function establishes a serial connection between the Arduino and whatever device the USB cable is connected to. A serial connection is used to transmit data (in this case numbers and letters) from the Arduino platform to your connected device (most likely a computer). For more on serial connections see the Wikipedia article: [https://en.wikipedia.org/wiki/Serial_communication ].
+
+Next, the loop() function has two lines of code. One to read the analog pin on the Arduino (val = analogRead(analogPin)), and one to send the value back to the device connected to the Arduino (Serial.println(val)).
+
+The period in the second line of code is an example of object oriented programming. You can think of the term Serial as a new type of variable like a double. In this case however, the variable type Serial also has functionality. In this case the function is println() which actually performs the function of printing a line of text to the serial connection. This text can now be read by the connected device using the serial monitor which is part of the Arduino IDE. For a complete set of help files on the different Arduino functions and programing structures, you can look through the Arduino reference page. [ https://www.arduino.cc/en/Reference/HomePage. ]
+
+If you type this code into the Arduino IDE or Web Editor and open the serial monitor you should see a bunch of number scrolling by. If you connect pin A3 to the GND (for ground) pin you should see a bunch of zeros scrolling by. If you connect pin A3 to the 5V pin, you should see a bunch of 1023’s scrolling by. Why is this and what if you connect the pin A3 to the 3.3V pin?
+</div> 
