@@ -132,7 +132,7 @@ As you go through this course, please keep in mind that the Arduino platform is 
 ### 2.4 Getting Data from Arduino
 
 <div style="text-align: justify"> 
-Regardless of how simple or complex you want your Arduino program to be, two function are required: setup() and loop(). The setup() function runs once when the Arduino first gets power. This is code you want to run once. The loop() function runs after the setup() function and, as the name suggests, runs over and over until the power to the Arduino is removed.
+Regardless of how simple or complex you want your Arduino program to be, two function are required: <code>setup()</code> and <code>loop()</code>. The <code>setup()</code> function runs once when the Arduino first gets power. This is code you want to run once. The <code>loop()</code> function runs after the <code>setup()</code> function and, as the name suggests, runs over and over until the power to the Arduino is removed.
 The code snippet below is an example of how to take an analog reading and send the reading back to the ‘serial monitor’.
 </div>
 
@@ -158,16 +158,63 @@ void loop()
 
 
 <div style="text-align: justify"> 
-A few general comments. The ‘//’ is how you write a comment line in C. In C, all lines of code must end with a semicolon. Notice there are two lines of code before the setup() function. These lines of code define two variables of type int (or integer). These variables are available to all functions in this code. The term void is the type of variable the function returns. In C we use the term void to mean nothing. In other words, the functions setup() and loop() do not return a variable.
+A few general comments. The ‘//’ is how you write a comment line in C. In C, all lines of code must end with a semicolon. Notice there are two lines of code before the <code>setup()</code> function. These lines of code define two variables of type int (or integer). These variables are available to all functions in this code. The term void is the type of variable the function returns. In C we use the term void to mean nothing. In other words, the functions <code>setup()</code> and <code>loop()</code> do not return a variable.
 
 The first two lines of code define the analog pin we are going to use to read data, and the variable we are going to use to store the analog data. In C, all variables must be defined before they can be used. In the above code, both variables are defined AND initialized. Initialization is not required but is considered good practice. These variables are accessible in all functions within the Arduino code. This
-idea is known as variable scope. If a variable is defined in the function setup() it is not available for use in loop() because that variable is only in scope in the function setup().
+idea is known as variable scope. If a variable is defined in the function <code>setup()</code> it is not available for use in <code>loop()</code> because that variable is only in scope in the function <code>setup()</code>.
 
-The first and only line of code in the setup() function establishes a serial connection between the Arduino and whatever device the USB cable is connected to. A serial connection is used to transmit data (in this case numbers and letters) from the Arduino platform to your connected device (most likely a computer). For more on serial connections see the Wikipedia article: [https://en.wikipedia.org/wiki/Serial_communication ].
+The first and only line of code in the <code>setup()</code> function establishes a serial connection between the Arduino and whatever device the USB cable is connected to. A serial connection is used to transmit data (in this case numbers and letters) from the Arduino platform to your connected device (most likely a computer). For more on serial connections see the Wikipedia article: [https://en.wikipedia.org/wiki/Serial_communication ].
 
-Next, the loop() function has two lines of code. One to read the analog pin on the Arduino (val = analogRead(analogPin)), and one to send the value back to the device connected to the Arduino (Serial.println(val)).
+Next, the <code>loop()</code> function has two lines of code. One to read the analog pin on the Arduino (<code>val = analogRead(analogPin) </code>), and one to send the value back to the device connected to the Arduino (<code>Serial.println(val)</code>).
 
-The period in the second line of code is an example of object oriented programming. You can think of the term Serial as a new type of variable like a double. In this case however, the variable type Serial also has functionality. In this case the function is println() which actually performs the function of printing a line of text to the serial connection. This text can now be read by the connected device using the serial monitor which is part of the Arduino IDE. For a complete set of help files on the different Arduino functions and programing structures, you can look through the Arduino reference page. [ https://www.arduino.cc/en/Reference/HomePage. ]
+The period in the second line of code is an example of object oriented programming. You can think of the term <code>Serial</code> as a new type of variable like a <code>double</code>. In this case however, the variable type <code>Serial</code> also has functionality. In this case the function is <code>println()</code> which actually performs the function of printing a line of text to the serial connection. This text can now be read by the connected device using the serial monitor which is part of the Arduino IDE. For a complete set of help files on the different Arduino functions and programing structures, you can look through the Arduino reference page. [ https://www.arduino.cc/en/Reference/HomePage. ]
 
 If you type this code into the Arduino IDE or Web Editor and open the serial monitor you should see a bunch of number scrolling by. If you connect pin A3 to the GND (for ground) pin you should see a bunch of zeros scrolling by. If you connect pin A3 to the 5V pin, you should see a bunch of 1023’s scrolling by. Why is this and what if you connect the pin A3 to the 3.3V pin?
 </div> 
+
+### 2.5 Analog to Digital Conversion
+
+An Analog to Digital Converter (ADC) is a type of signal processor that converts an analog voltage on a pin to a digital number. By converting from the analog world to the digital world, we can begin to use electronics to interface to the analog world around us.
+
+Not every pin on a microcontroller can do analog to digital conversions. On the Arduino board, these pins have an ‘A’ in front of their label (A0 through A5) to indicate these pins can read analog voltages.
+
+ADCs can vary greatly between microcontrollers. The ADC on the Arduino is a 10-bit ADC meaning it can detect 1,024 (or $2^{10}$) discrete analog levels. Some microcontrollers have 8-bit ADCs (or $2^{8}$) = 256 discrete levels and some have 16-bit ADCs (or $2^{16}$) = 65,536 discrete levels.
+
+The way an ADC works is complex. There are a few different ways to achieve this feat (see Wikipedia for a list [ https://en.wikipedia.org/wiki/Analog-to-digital_converter ]) , but one of the most common technique uses the analog voltage to charge up an internal capacitor and then measure the time it takes to discharge across an internal resistor. The microcontroller monitors the number of clock cycles that pass before the capacitor is discharged. This number of cycles is the number that is returned once the ADC is complete.
+
+#### 2.5.1 Relating ADC Value to Voltage
+
+Referring to Figure 2, notice the ADC on the Arduino platform is measuring the voltage across the thermistor. The thermistor is part of a simple voltage divider with resistance 𝑅. A voltage divider is a
+simple circuit that splits the voltage applied to two resistors proportionally. See the Wikipedia article for reference: https://en.wikipedia.org/wiki/Voltage_divider. In this case, the voltage measured by the Arduino platform is,
+
+$$
+\begin{equation}
+  𝑉0=\frac {𝑅_𝑇}{𝑅_𝑇+𝑅} 𝑉_{𝑐𝑐}
+\end{equation}
+$$
+
+where $𝑉_{𝑐𝑐}$ is the supply voltage to the voltage divider (3.3𝑉 or 5𝑉 on the Arduino platform).
+The ADC reports a ratio-metric value. This means that the Arduino platform ADC assumes $𝑉_{𝑎𝑟𝑒𝑓}$ is the high end of the range of possible values ($2^{10}$−1=1023) and $𝑉_{𝐺𝑁𝐷}$ is the low end of the range of possible values, 0. Anything measurement, $𝑉_{0}$ less than $𝑉_{𝑐𝑐}$ or greater than $𝑉_{𝐺𝑁𝐷}$ is proportional to the ratio between 210−1=1023 and $𝑉_{𝑎𝑟𝑒𝑓}$. In this case,
+
+$$
+\begin{equation}
+𝐴𝐷𝐶=\frac{1023}{𝑉𝑎𝑟𝑒𝑓} 𝑉_{0}
+\end{equation}
+$$
+
+Combining Equations (1) and (2), we get,
+
+$$
+\begin{equation}
+𝐴𝐷𝐶=1023 \frac {𝑅𝑇}{𝑅𝑇+𝑅} \frac {𝑉𝑐𝑐}{𝑉_{𝑎𝑟𝑒𝑓}}
+\end{equation}
+$$
+
+Notice the analog to digital conversions are dependent on the system voltage. On the Arduino platform, $𝑉_{𝑎𝑟𝑒𝑓}=5𝑉$ and $𝑉_{𝐺𝑁𝐷}=0𝑉$. If we supply the voltage divider with $𝑉_{𝑐𝑐}=𝑉_{𝑎𝑟𝑒𝑓}=5𝑉$, the ratio $\frac{𝑉_{𝑐𝑐}}{𝑉_{𝑎𝑟𝑒𝑓}}=1$ and the ADC reading equation simplifies to
+
+$$
+\begin{equation}
+𝐴𝐷𝐶=1023 \frac {𝑅𝑇}{𝑅𝑇+𝑅}
+\end{equation}
+$$
+On the other hand, if we use $𝑉_{𝑐𝑐}=3.3𝑉$ or $𝑉_{𝑐𝑐}=𝑉_{𝑖𝑛}$, the ADC reading would need to be scaled appropriately.
