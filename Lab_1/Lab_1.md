@@ -262,6 +262,9 @@ $$
 
 #### 2.5.2 Quantization Error
 
+
+<!-- justify text - <div style="text-align: justify"> your-text-here </div>     -->
+
 The difference between an input value and its quantized value (such as round-off error) is referred to as quantization error. A device or algorithmic function that performs quantization is called a quantizer. An analog-to-digital converter is an example of a quantizer.
 
 
@@ -273,8 +276,70 @@ The difference between an input value and its quantized value (such as round-off
   <figcaption>Figure 3. An example of an original signal, quantized signal and noise.  </figcaption>
 </figure>
 
+<div style="text-align: justify"> 
+
+
 The simplest way to quantize a signal is to choose the digital amplitude value closest to the original analog amplitude. This example shows the original analog signal (<code style="color : Green">green</code>), the quantized signal (black dots), the signal reconstructed from the quantized signal (<code style="color : Yellow">yellow</code>) and the difference between the original signal and the reconstructed signal ((<code style="color : Red">red</code>)). The difference between the original signal and the reconstructed signal is the quantization error and, in this simple quantization scheme, is a deterministic function of the input signal.
 
 An ADC can be modeled as two processes: sampling and quantization. Sampling converts a voltage signal (function of time) into a discrete-time signal (sequence of real numbers). Quantization replaces each real number with an approximation from a finite set of discrete values (levels), which is necessary for storage and processing by numerical methods. Most commonly, these discrete values are represented as fixed-point words (either proportional to the waveform values or compounded) or floating-point words. Common word-lengths are 8-bit (256 levels), 16-bit (65,536 levels), 32-bit (4.3 billion levels), and so on, though any number of quantization levels is possible (not just powers of two). Quantizing a sequence of numbers produces a sequence of quantization errors which is sometimes modeled as an additive random signal called quantization noise because of its stochastic behavior. The more levels a quantizer uses, the lower is its quantization noise power.
 
 In general, both ADC processes lose some information. As such, discrete-valued signals are only an approximation of the continuous-valued discrete-time signal, which is itself only an approximation of the original continuous-valued continuous-time signal. But both types of approximation errors can, in theory, be made arbitrarily small by good design
+
+</div>
+
+#### 2.5.3 Resolution
+
+<div style="text-align: justify"> 
+
+The resolution of the converter indicates the number of discrete values it can produce over the range of analog values. The resolution determines the magnitude of the quantization error and therefore determines the maximum possible average signal to noise ratio for an ideal ADC without the use of oversampling. The values are usually stored electronically in binary form, so the resolution is usually expressed in bits. In consequence, the number of discrete values available, or "levels", is assumed to be a power of two. For example, an ADC with a resolution of 8 bits can encode an analog input to one in 256 different levels, since $2^8=256$. The ADC values can represent the ranges from 0 to 255.
+
+</div>
+
+<figure>
+  <img src="ADC_coding_scheme.jpeg" alt="An 8-level ADC coding scheme" width: 100%;
+  height: auto;
+  /* Magic! */
+  max-width: 50vw;>
+  <figcaption>An 8-level ADC coding scheme, used with permission from Courtesy Spinningspark at Wikipedia, CC BY-SA 3.0, [ https://en.wikipedia.org/w/index.php?curid=27373154 ] </figcaption>
+</figure>
+
+<div style="text-align: justify">
+
+Resolution can also be defined electrically, and expressed in volts. The minimum change in voltage required to guarantee a change in the output code level is called the least significant bit (LSB) voltage. The resolution 𝑄 of the ADC is equal to the LSB voltage. The voltage resolution of an ADC is equal to its overall voltage measurement range divided by the number of intervals: $𝑄=\frac{𝐸_(𝐹𝑆𝑅)}{2^𝑀}$
+
+Where 𝑀 is the ADC's resolution in bits and $𝐸_{𝐹𝑆𝑅}$ is the full scale voltage range (also called 'span'). $𝐸_{𝐹𝑆𝑅}$ is given by $𝐸_{𝐹𝑆𝑅}=𝑉_{𝑅𝑒𝑓𝐻𝑖}−𝑉_{𝑅𝑒𝑓𝐿𝑜𝑤}$. Where $𝑉_{𝑅𝑒𝑓𝐻𝑖}$ and $𝑉_{𝑅𝑒𝑓𝐿𝑜𝑤are}$ the upper and lower extremes, respectively, of the voltages that can be coded. 
+
+Normally, the number of voltage intervals is given by $𝑁= 2^𝑀$. That is, one voltage interval is assigned in between two consecutive code levels.
+
+</div>
+
+### 2.6 Calibration
+
+<div style="text-align: justify">
+
+Instrument calibration is one of the primary processes used to maintain instrument precision and accuracy. Calibration is the process of configuring an instrument to provide a result for a sample within an acceptable range. Eliminating or minimizing factors that cause inaccurate measurements is a fundamental aspect of instrumentation design.
+
+Although the exact calibration procedure may vary from system to system, the calibration process generally involves using the instrument to test samples of one or more known values called “calibrators.” The results are used to establish a relationship between the measurement technique used by the instrument and the known values. The process “teaches” the instrument to produce results that are more accurate than those that would occur otherwise. The instrument can then provide more accurate results when samples of unknown values are tested in the normal usage of the product.
+
+Calibrations are performed using only a few calibrators to establish the correlation at specific points within the instrument’s operating range. While it might be desirable to use many calibrators to establish the calibration relationship, or “curve”, the time and labor associated with preparing and testing many calibrators might outweigh the resulting level of performance. From a practical standpoint, a tradeoff must be made between the desired level of product performance and the effort associated with accomplishing the calibration. The instrument will provide the best performance when the intermediate points provided in the manufacturer’s performance specifications are used for calibration; the specified process essentially eliminates, or “zeroes out”, the inherent instrument error at these points
+
+</div> 
+
+#### 2.6.1 Temperature Measurement
+
+The calibration process for a thermistor involves two parts, converting the measured resistance to a temperature reading, and then accounting for any systemic bias errors.
+In this lab, the sensor is a negative temperature coefficient (NTC) thermistor. More precisely, we are using a MF52-103 thermistor (https://www.digikey.com/catalog/en/partgroup/mf52/10700 )
+
+To determine the temperature of the thermistor given a resistance reading, we can use the B parameter equation which is a simplified version of the Steinhart-Hart equation. For more on these equations (and thermistors in general, see Chapter 14 of the book or this Wikipedia article https://en.wikipedia.org/wiki/Thermistor. The B parameter equation has the form,
+
+$$
+\begin{equation}
+\frac{1}{𝑇}=\frac{1}{𝑇_0}+\frac{1}{𝐵} ln (\frac{𝑅}{𝑅0})
+\end{equation}
+$$
+
+where $𝑇_{0}=298.15𝐾=25℃$ is the calibration room temperature, 𝐵 is the coefficient of the thermistor given by the manufacturer, 𝑅 is the measured resistance, and, 𝑅0 is the resistance of the thermistor at room temperature given by the manufacture. You will need to find values for 𝐵 and $𝑅_0$. For the MF52-103 thermistor.
+
+#### 2.6.2 Sensitivity of Measurement
+
+The B parameter equation approximates the physical relationship between temperature and resistance for this type of thermistor. Notice equation 5 is a non-linear function of the measured resistance. In this case, we can say the thermistor in NOT a linear sensor and the sensitivity of measurement changes as a function of the measured resistance. In general, the sensitivity of measurement is the slope (or derivative of equation 6) evaluated at the measured resistance.
