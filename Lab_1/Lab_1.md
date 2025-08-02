@@ -343,3 +343,24 @@ where $𝑇_{0}=298.15𝐾=25℃$ is the calibration room temperature, 𝐵 is t
 #### 2.6.2 Sensitivity of Measurement
 
 The B parameter equation approximates the physical relationship between temperature and resistance for this type of thermistor. Notice equation 5 is a non-linear function of the measured resistance. In this case, we can say the thermistor in NOT a linear sensor and the sensitivity of measurement changes as a function of the measured resistance. In general, the sensitivity of measurement is the slope (or derivative of equation 6) evaluated at the measured resistance.
+
+#### 2.6.3 Offset
+
+While the B parameter equation is a good place to start to convert the measured resistance to a temperature reading, we can do a better job estimating the actual temperature if we calibrate all systematic errors away.
+
+In this case, the obvious systematic errors come from the resistor used in the voltage divider and the thermistor. All resistors are rated with a tolerance, i.e., 10𝐾Ω±5%. The MF52-103 thermistor also has a tolerance. These errors in the exact resistance of the resistors primarily come from manufacturing inconsistencies. However, if we measure the resistance of the thermistor at a known temperature we can compare the known temperature to the measured temperature. The difference in these two temperatures is the offset or systemic bias error of the measurement system. Now, all we need to do is subtract the bias error from the measurement, and we have a better measurement of the temperature near the calibration point (why?). This is known as a ‘single point’ calibration.
+
+
+<div style="color:black; background:lightyellow; border: 1px dashed black">
+
+**Example**: If the known temperature of the room is $𝑇_𝑘=25.15℃$ and the measured temperature is 𝑇=24.87℃ then the systemic bias error is $𝜖=𝑇−𝑇_{𝑘}=24.87℃−25.15℃=−0.28℃$. 
+
+Therefore, the corrected measured temperature is $𝑇_{𝑐}=𝑇−𝜖=24.87℃−(−0.28℃)=25.15℃.$
+
+</div>
+
+### 2.7 Getting Data into Matlab
+
+If you are using the Arduino IDE or web-based IDE, viewing the data streaming from the Arduino platform to your computer is a simple matter of turning on the serial monitor. But how can we save these values for analysis with Matlab?
+
+One easy way to get data into Matlab is to use the <code> serial() </code> and <code>fopen()</code> commands. Please see the <code> serial_reader.m </code> Matlab script on the course PolyLearn page. This Matlab script will connect to the Arduino platform and gather 10 as quickly as data is available. These parameters can be changed as needed.
