@@ -364,3 +364,64 @@ Therefore, the corrected measured temperature is $𝑇_{𝑐}=𝑇−𝜖=24.87�
 If you are using the Arduino IDE or web-based IDE, viewing the data streaming from the Arduino platform to your computer is a simple matter of turning on the serial monitor. But how can we save these values for analysis with Matlab?
 
 One easy way to get data into Matlab is to use the <code> serial() </code> and <code>fopen()</code> commands. Please see the <code> serial_reader.m </code> Matlab script on the course PolyLearn page. This Matlab script will connect to the Arduino platform and gather 10 as quickly as data is available. These parameters can be changed as needed.
+
+## 3 Pre-Lab Assignment
+
+Please complete the following tasks BEFORE your assigned lab start time:
+
+- Read Chapters 1 and 2 from the course text book. Complete the ‘Pre-Lab 1 - Sensors’ quiz module on the course PolyLearn Page.
+- Either: 
+  - Create an account with Arduino [https://login.arduino.cc/login] and have the Arduino Web Editor working in a browser window 
+  - Download and install the Arduino IDE [https://www.arduino.cc/en/software/] for your operating system o You may want to Download and install the NotePad++ IDE which can help format code correctly [https://notepad-plus-plus.org/]. 
+  - Download and install a recent version of Matlab. I have not tried to use Matlab online or via Appstream. We can try this, but there may be issues connecting to the serial port.
+
+## 4 Lab Assignment
+
+Complete the **Lab 1 – Sensors** quiz on the PolyLearn page. The procedure and questions are given below so you can review the lab before your lab section.
+
+### 4.1 Analog Sensors
+
+In this section, you will describe your thermistor using the terms and definitions from the class text book.
+1. Referring to section 2.2 of the book, what terms best describe your Thermistor (not all terms apply)?
+  - Active or Passive
+  - Null-Type or Deflection-Type
+  - Analog or Digital
+  - Indicators or Instruments with Signal Output
+  - Smart or Nonsmart 
+2. Provide a link to a data sheet for your thermistor.
+
+### 4.2 Sensor Characteristics
+
+Following along with the book and lab documentation, in this section, you will determine various characteristics of your thermistor. First, you will need to connect your sensor to the Arduino platform and write code to read the analog sensor.
+
+3. Write and upload the Arduino code required to do the following:
+  - Read raw ADC readings from the thermistor continuously from an analog pin. It is not important which analog pin you use.
+  - Wait 1 second
+  - Repeat 
+4. Enter 10 of the raw ADC readings you measured. 
+5. Using the 10 raw ADC readings, determine the likely precision of your thermistor as a percentage of the full ADC range of the Arduino.
+
+### 4.3 Sensor Calibration
+
+In this section you will use your data to calibrate your thermistor. You will be asked to submit a Matlab script showing all your calculations at the end of this section.
+
+6. Modify and upload your Arduino code to do the following:
+  - Convert the raw ADC reading to a resistance reading of the thermistor
+  - If you have a multimeter available, measure the resistance of the fixed resistor of the voltage divider. Use this resistance in your code to improve the accuracy of your results.
+  - Convert the resistance reading to a temperature reading in Celsius.
+  - Send the temperature reading to the serial port 
+7. What is the approximate temperature reading of your thermistor in ºC?
+8. Determine the Sensitivity of Measurement Function based on equation 6 from the lab manual.
+9. What is the sensitivity gain of your thermistor around the current temperature reading?
+
+10. Using a known calibrated thermometer, determine the offset of your thermistor in ºC using one temperature measurement? If you do not have a calibrated thermometer, you can skip this step.
+11. Using the known calibrated thermometer, determine and enter the accuracy of your thermistor in ºC using 10 temperature readings. What is the calibrated temperature?
+12. What is the full measurement range of your thermistor (min to max)?
+13. What is the resolution of your thermistor around the measured temperature?
+14. Submit the Matlab code and data file you used to determine the quantities above, namely:
+- Current Temperature
+- Sensitivity Gain
+- Offset
+- Accuracy
+- Measurement Range
+- Resolution
