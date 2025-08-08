@@ -425,3 +425,16 @@ In this section you will use your data to calibrate your thermistor. You will be
 - Accuracy
 - Measurement Range
 - Resolution
+
+
+### 4.4 Linearity and Order
+
+The thermistor you are using is a non-linear sensor. In other words, the change in temperature is not proportional to a change in resistance of the thermistor. However, the delayed response to a change in temperature is a linear response and has a fixed time constant. By taking temperature and resistance data while squeezing the thermistor, you can estimatae the time constant of the thermistor.
+
+15. Taking temperature readings once a second for 30 seconds, squeeze the thermistor with your fingers once you start collecting data. Plot the temperature versus time. Determine the first order time constant from the data (the time required to reach 63.2% of the final value). Upload the code used to determine the time constant and the plot of your data.
+
+### 4.5 Reflections
+
+16. Reflect and comment on the following:
+  - What are some challenges with reading analog data?
+  - How could you improve the accuracy and precision of your sensor system?
