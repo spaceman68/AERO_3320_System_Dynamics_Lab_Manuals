@@ -99,3 +99,63 @@ void loop()
 }
 ``` 
 </div>
+
+### 2.4 Error Propagation - Calculated Quantities
+
+Once you have good measurement data, you will likely need to use some equation based on the physics of your system to calculate some final value of interest. Chapter 4 of the course textbook gives a discussion on how to find the error of calculated quantities given the error of the measured quantities. This process is also known as Error Propagation or Propagation of Uncertainty. Error Propagation is a very important technique used in experimentation. Please read section 14 of chapter 4 for an overview of how to propagate errors of calculated values. For additional information, here is link to a Wikipedia article: https://en.wikipedia.org/wiki/Propagation_of_uncertainty
+
+## 3 Pre-Lab Assignment
+
+Please complete the following tasks BEFORE your assigned lab start time:
+- Read sections 1 through 5 of chapter 3
+- Read sections 1 through 11, and 14 of chapter 4
+- Read section 1 through 7, and 10 of chapter 6
+- Complete the ‘Pre-Lab 2 – Noise’ quiz module on the course canvas Page.
+
+## 4 Lab Assignment
+
+Complete the Lab 2 – Noise quiz on the Canvas page (10 points). The procedure and questions are given below so you can review the lab before your lab section.
+
+### 4.1 Sensor Basics
+
+1. (2 points) What are potential systematic measurement errors for the ultrasonic sensor?
+2. (3 points) What are potential random measurement errors for the ultrasonic sensor?
+3. (10 points) Set up the HC-SR04 ultrasonic sensor as described in section 2.1 of the lab manual. You will also need to write the code to measure and output the distance to the serial port. Upload the code to the Arduino platform. Also, pate your Arduino file for grading.
+
+### 4.2 Multiple Measurements - 10 Hz
+
+<i> Note: For this section, collect your data into Matlab and save the data as a .mat file. You can then write a script to answer parts a. through e. </i>
+
+4. Place the ultrasonic sensor in a location to measure a fixed distance for a ten-second time span at 0.1-second intervals. Use the delay command in Arduino to implement the delay. In other words, set up something to block the ultrasonic signal somewhere on your desktop. Export the distance readings from Arduino and create a Matlab script to calculate all values below.
+
+     <ol type="a">
+        <li>(4 points) What is the mean distance measured over this time span? Does the actual distance change significantly during this time span?</li>
+        <li>(4 points) What is the standard deviation of the measurements?</li>
+        <li>(4 points) What is the standard error of the mean of the measurements?</li>
+        <li>(3 points) Use a ruler to measure the actual fixed distance, how precise and accurate is the ultrasonic sensor?</li>
+        <li>(3 points) What is the “goodness of fit” of your data to a Gaussian Distribution? Use a 𝜒2 test. This data is not great for calculating a goodness of fit value, so do not expect a low value. Also, feel free to use the <code> chi2gof() </code> Matlab function.</li>
+        <li>(15 points) Upload the following:</li>
+            <ol type="i">
+                <li>The Matlab code used to calculate the quantities in a. through e.</li>
+                <li>The distance measurements as a Matlab .mat file</li>
+                <li>A plot of your raw data versus time.</li>
+            </ol> 
+    </ol> 
+
+### 4.3 Multiple Measurements - 100 Hz
+
+5 (Same points as part 4) Repeat part 4 except now measure the fixed distance 100 times per second.
+
+### 4.4 Cleaning the Data
+
+6 Implement a complementary filter for your ultrasonic sensor in arduino code. Initially, let $\alpha = 0.5 $ 
+    <ol type="a">
+                <li>(5 points) Repeat part 4.2 (10 Hz). How does the complementary filter affect your calculations?.</li>
+                <li>(5 points) Take ten seconds worth of filtered and unfiltered data with 𝛼=0.5. While you are taking data, move the ultrasonic sensor away from the fixed block. Plot your filtered and unfiltered data. How does the filter effect the ‘dynamic response’ of the sensor? In this case, ‘dynamic response’ refers to the response time of the sensor; how fast does the sensor react to a change in distance?
+                
+                You can output more than one value of date to the serial port using the print() and println() commands together. In Matlab, you will need to specify that the data you are reading from the serial port has two columns. You will need to add a dimension to the data variable and change the format string of the fscanf() function.</li>
+
+                <li>(5 points) Repeat part 6b for $/alpha ={0.1,0.3,0.5,0.7,0.9}$. Plot and upload all five filtered data sets on one set of axes. How does changing /alpha change the dynamic response of the filter?</li>
+    </ol>  
+
+7. (5 points) Using your ultrasonic sensor with the complementary filter implemented, measure the length of two sides of a rectangular object. Calculate the area of your object. Calculate the area of your object and the associated error. In other words, 𝐴+𝛿𝐴=(𝑥+𝛿𝑥)(𝑦+𝛿𝑦). You can measure (𝑥+𝛿𝑥) and (𝑦+𝛿𝑦), and then compute 𝐴+𝛿𝐴 using error propagation techniques from chapter 4 of the textbook.
