@@ -144,18 +144,15 @@ Complete the Lab 2 – Noise quiz on the Canvas page (10 points). The procedure 
 
 ### 4.3 Multiple Measurements - 100 Hz
 
-5 (Same points as part 4) Repeat part 4 except now measure the fixed distance 100 times per second.
+5. (Same points as part 4) Repeat part 4 except now measure the fixed distance 100 times per second.
 
 ### 4.4 Cleaning the Data
 
-6 Implement a complementary filter for your ultrasonic sensor in arduino code. Initially, let $\alpha = 0.5 $ 
-    <ol type="a">
+6. Implement a complementary filter for your ultrasonic sensor in arduino code. Initially, let $\alpha = 0.5 $ 
+        <ol type="a">
                 <li>(5 points) Repeat part 4.2 (10 Hz). How does the complementary filter affect your calculations?.</li>
                 <li>(5 points) Take ten seconds worth of filtered and unfiltered data with 𝛼=0.5. While you are taking data, move the ultrasonic sensor away from the fixed block. Plot your filtered and unfiltered data. How does the filter effect the ‘dynamic response’ of the sensor? In this case, ‘dynamic response’ refers to the response time of the sensor; how fast does the sensor react to a change in distance?
-                
                 You can output more than one value of date to the serial port using the print() and println() commands together. In Matlab, you will need to specify that the data you are reading from the serial port has two columns. You will need to add a dimension to the data variable and change the format string of the fscanf() function.</li>
-
                 <li>(5 points) Repeat part 6b for $/alpha ={0.1,0.3,0.5,0.7,0.9}$. Plot and upload all five filtered data sets on one set of axes. How does changing /alpha change the dynamic response of the filter?</li>
-    </ol>  
-
+        </ol>  
 7. (5 points) Using your ultrasonic sensor with the complementary filter implemented, measure the length of two sides of a rectangular object. Calculate the area of your object. Calculate the area of your object and the associated error. In other words, 𝐴+𝛿𝐴=(𝑥+𝛿𝑥)(𝑦+𝛿𝑦). You can measure (𝑥+𝛿𝑥) and (𝑦+𝛿𝑦), and then compute 𝐴+𝛿𝐴 using error propagation techniques from chapter 4 of the textbook.
