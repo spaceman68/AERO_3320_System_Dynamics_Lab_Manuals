@@ -152,7 +152,7 @@ Upon inspection, if a constant voltage is applied, the motor must accelerate bef
   <figcaption>Figure 3. Motor Shaft Response to a 1V command.  </figcaption>
 </figure>
 
-Figure 3 is a Motor Shaft Response to a 1V command  with $k=2 \frac{rad/s}{V}$ and $\tau = 0.3s$. The fact that the motor cannot instantly run at $2\frac{rad}{s}$ when 1V is applied is an example of rate limiting and is discussed in the next section.
+The Motor Shaft Response to a 1V command  with $k=2 \frac{rad/s}{V}$ and $\tau = 0.3s$ is shown in figure 3. The fact that the motor cannot instantly run at $2\frac{rad}{s}$ when 1V is applied is an example of rate limiting and is discussed in the next section.
 
 #### 2.2.2 DC Motor Speed Control
 
@@ -181,3 +181,12 @@ In this lab, we will use hobby RC servo motors. While these servo motor are not 
 There is one important difference between our servo motors and more sophisticated models; our servo motors cannot directly measure their own position. Therefore, unless we measure the displacement of the servo motor and calibrate the servo motor, we are commanding a rotation angle, but we don’t know what angle the servo motor is at. We will fix this problem in the next lab.
 
 The Arduino code base has a servo library built-in, but in this lab, we will be using our own code to drive the servo. RC servo motors use a Pulse Width Modulation (PWM) scheme to control the rotation angle of the servo. Figure 5 shows how the PWM scheme works.
+
+
+<figure>
+  <img src="PWM_scheme.jpeg" alt=PWM Scheme" width: 100%;
+  height: auto;
+  /* Magic! */
+  max-width: 50vw;>
+  <figcaption>Figure 5. The PWM scheme used for RC servo motors.  </figcaption>
+</figure>
