@@ -106,11 +106,78 @@ $$
     𝑇=k_m i ,
 \end{equation}
 $$
- and
 $$
   e= k_b \dot{\theta}  
 $$
 
 where $k_m$ is the motor torque constant, and $k_b$ is the electromotive force constant.
 
-For most DC motor we can make the assumption that L is small (e.g. $ L \approx 0 $)
+For most DC motor we can make the assumption that L is small (e.g. $ L \approx 0 $). Using this assumption, we can combine equations ( 1 ) – ( 3 ) to form the differential equation that relates motor shaft displacement to applied voltage, as,
+
+$$
+    𝑣(𝑡)=\frac{RJ}{k_m} \ddot{\theta}(t)+ (\frac{Rb}{k_m}+k_b) \dot{\theta}(t)
+$$
+Now, let $𝜔(𝑡)=\dot{\theta}(𝑡)$, $𝑐_1=\frac{RJ}{k_m}𝑅𝐽𝑘𝑚$, and $𝑐_2= \frac{Rb}{k_m}+𝑘_𝑏$, and we have,
+
+$$
+\begin{equation}
+v(t) = c_1 + \dot{\omega}(t) + c_2 \omega(t)
+\end{equation}
+$$
+
+We can now solve the differential equation in equation ( 4 ) using any standard method. Assume the motor shaft is initially at rest, $ 𝜔(0)=0 \frac{rad}{s} $ and $𝑣(𝑡)=𝑣_𝑐=𝑐𝑜𝑛𝑠𝑡$, we get a solution of,
+
+$$
+\begin{equation}
+    \omega(𝑡)=  \frac{v_c}{c_2}(1-e^{\frac{c_2}{c_1} t})
+\end{equation}
+$$
+
+Finally, let $𝜅=\frac{1}{c_2}$ (known as the motor gain) and $\tau=\frac{c_1}{c_2}$ (known as the motor time constant), and we have,
+
+$$
+\begin{equation}
+    \omega(t)=𝜅𝑣_𝑐(1−𝑒^{\frac{t}{\tau}})
+\end{equation}
+$$
+
+Upon inspection, if a constant voltage is applied, the motor must accelerate before the final speed $𝜅𝑣_𝑐$. This is due to the exponentially decaying term $𝑒^{\frac{t}{\tau}}$. An example of this acceleration is shown in Figure 3 below.
+
+
+<figure>
+  <img src="motor_shaft_response.jpeg" alt=Motor Shaft Response" width: 100%;
+  height: auto;
+  /* Magic! */
+  max-width: 50vw;>
+  <figcaption>Figure 3. Motor Shaft Response to a 1V command.  </figcaption>
+</figure>
+
+Figure 3 is a Motor Shaft Response to a 1V command  with $k=2 \frac{rad/s}{V}$ and $\tau = 0.3s$. The fact that the motor cannot instantly run at $2\frac{rad}{s}$ when 1V is applied is an example of rate limiting and is discussed in the next section.
+
+#### 2.2.2 DC Motor Speed Control
+
+Now that we have derived the equations that relate voltage to motor speed, we can turn our attention to using the Arduino platform to command the speed of a DC motor. Since the Arduino is a digital system (and as technology has progressed) we are going to use a motor controller board which uses an H-bridge and Pulse Width Modulation (PWM) to control the direction and speed of the motor. For details on H-bridges and PWM, check out these links: https://en.wikipedia.org/wiki/H-bridge and https://en.wikipedia.org/wiki/Pulse-width_modulation.
+
+Using PWM for motor speed control is very common. The basic idea is that the voltage across the motor is the average of the pulses over time. The pulses start at even intervals, but their width (or duration) changes. The Arduino platform has several digital outputs specifically designed to be PWM output ports.
+
+The motor speed control you will use for this lab is the L293D chip set. For a tutorial on connecting this controller to two motors (great for wheeled robots), check out this link: https://www.instructables.com/id/Arduino-How-to-Control-DC-Motors-With-L293D-Motor-/. The breadboard diagram for hooking up the L293D is shown below in Figure 4 and is from the website list above.
+
+<figure>
+  <img src="breadboard_figure.jpeg" alt=Breadboard Figure showing how to connect the L293D" width: 100%;
+  height: auto;
+  /* Magic! */
+  max-width: 50vw;>
+  <figcaption>Figure 4. The breadboard figure showing how to hook up the L293D.  </figcaption>
+</figure>
+
+For information about what the different inputs and outputs of the L293D are used for and how to set the direction and speed of each motor, check out the tutorial at the link above.
+
+#### 2.2.3 Servo Motors
+
+A servo motor combines a DC motor with some gearing and a method for controlling the displacement of the motor shaft. Servo motors are used extensively to control the rotational motion of a system, or, using rods and pins, the linear displacement of a system. For a general overview of servo motors, see this Wikipedia article: https://en.wikipedia.org/wiki/Servomotor.
+
+In this lab, we will use hobby RC servo motors. While these servo motor are not a powerful or precise as larger, more expensive systems, the way they function is essentially the same. For an overview on RC servo motors, see this tutorial from Sparkfun. https://learn.sparkfun.com/tutorials/hobby-servo-tutorial?_ga=2.212353044.1489739466.1507153797-1876508606.1503948408.
+
+There is one important difference between our servo motors and more sophisticated models; our servo motors cannot directly measure their own position. Therefore, unless we measure the displacement of the servo motor and calibrate the servo motor, we are commanding a rotation angle, but we don’t know what angle the servo motor is at. We will fix this problem in the next lab.
+
+The Arduino code base has a servo library built-in, but in this lab, we will be using our own code to drive the servo. RC servo motors use a Pulse Width Modulation (PWM) scheme to control the rotation angle of the servo. Figure 5 shows how the PWM scheme works.
