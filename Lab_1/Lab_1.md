@@ -8,8 +8,6 @@ Original Author: Leonardo Torres
 
 Additional Author: Connell Crawford
 
-New Line TEST
-
 # Lab 1 Sensor Characterization and Calibration
 
 ## 1. Objectives
