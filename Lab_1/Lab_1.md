@@ -5,7 +5,6 @@ Maintenance: Stephen Thiam-Choy Kwok-Choon
 Email: skwokcho@calpoly.edu
 
 Original Author: Leonardo Torres
-
 Additional Author: Connell Crawford
 
 # Lab 1 Sensor Characterization and Calibration

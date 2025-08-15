@@ -190,3 +190,177 @@ The Arduino code base has a servo library built-in, but in this lab, we will be 
   max-width: 50vw;>
   <figcaption>Figure 5. The PWM scheme used for RC servo motors.  </figcaption>
 </figure>
+
+To implement a PWM scheme for an RC servo, you write code that sends a high voltage (5V) pulse to the servo motor every 20ms. The duration (or width) of the pulse is interpreted by the servo control electronics as an angle of displacement. For most RC servos, the range of pulse widths to command the related angles is close to what is shown in Figure 5. However, this is more of a convention than a standard. Hence, it is usually necessary to determine the limits of your servo and find the relationship between pulse width and desired angular displacement. You will perform this operation as part of this lab.
+
+The bread board and schematic view of connecting a servo to the Arduino platform are show in Figure 6 below.
+
+<p align="center">
+  <img alt="Servo Wiring Diagram 1" src="./servo_wiring_1.jpeg" width="45%">
+&nbsp; &nbsp; &nbsp;
+  <img alt="Servo Wiring Diagram 2" src="./servo_wiring_2.jpeg" width="45%">
+<figcaption>Figure 6. Schematic and board view of connecting a servo to an Arduino Platform.  </figcaption>
+</p>
+
+The connection is quite simple. Connect power (<code>5V</code> and <code>GND</code>) to the red and black servo wires, and connect the servo signal wire to any digital pin on the Arduino. Now we write some Arduino code. The code snippet below commands a servo connected to digital pin 2 to rotate to somewhere close to $90^{\circ}$.
+
+<div style="color:black; background:lightblue; border: 1px dashed black">
+
+``` 
+int servoPin = 2; // Define the digital pin number 
+int pulse = 1200; // Define the pulse width in microseconds 
+
+void setup() {
+     pinMode(servoPin, OUTPUT);//Set the digital pin mode as an output pin 
+     }
+
+void loop() {
+    digitalWrite(servoPin, HIGH); //Write a HIGH value to the digital pin
+    delayMicroseconds(pulse);     //Wait the desired pulse time  
+    digitalWrite(servoPin, LOW);  //Write a LOW value to the digital pin
+    delayMicroseconds(20000); //Wait 20 milliseconds
+    }
+``` 
+</div>
+
+The four lines of code in the loop() function implement the PWM scheme with a constant pulse width. If we want to vary the pulse width, we would need some mechanism to provide an input into the Arduino platform. In this lab, you will use a potentiometer as a means to change the desired angle and hence, pulse width.
+
+### 2.3 Rate and Saturation Limits
+
+The ***rate limit*** of an actuator is the fastest speed allowable for actuator motion. The units of maximum rate must be the units of demanded actuator position per second. All physically realizable actuators have a limit to their performance. The example above for the DC motor is an example of rate limitation of an actuator. The motor cannot instantly accelerate to some new commanded speed. Based on equation ( 6 ) in this example, the smaller the value 𝜏, the faster the motor will accelerate and rate limiting will have less impact on the system.
+
+The idea of saturation applies to both actuator and sensors. For actuators, saturation show up as a maximum effort the actuator can make. For the physical relationships for the DC motor described in equation ( 3 ) the rotational speed of a DC motor is proportional to the voltage across the motor coils. But if we apply a voltage that is too high, the motor will most likely overheat and equation ( 3 ) is no longer valid. In addition, the motor will most likely be damaged! Therefore, there is a maximum speed at which we can safely operate a DC motor. This type of saturation is known as “soft limit” saturation as shown in Figure 7.
+
+<figure>
+  <img src="./soft_limit_saturation.jpeg" alt=Soft Limit Saturation" width: 100%;
+  height: auto;
+  /* Magic! */
+  max-width: 50vw;>
+  <figcaption>Figure 7. Example of soft limit saturation  </figcaption>
+</figure>
+
+Another simple example of saturation is a control surface of an aircraft. Aircraft control surfaces have “hard limits”. In other words, the elevator of an airplane can only rotate so far before it is mechanically limited meaning the elevator is physically limited from rotating. This is known as “hard limit” saturation and an example plot is shown in Figure 8.
+
+<figure>
+  <img src="./hard_limit_saturation.jpeg" alt=Hard Limit Saturation" width: 100%;
+  height: auto;
+  /* Magic! */
+  max-width: 50vw;>
+  <figcaption>Figure 8. Example of hard limit saturation  </figcaption>
+</figure>
+
+Generally, saturation is a nonlinear response. Sometimes it is truly a hard limit (Figure 8). Other times it can be better modeled by a hyperbolic tangent (Figure 7). In either case the sensor or actuator is saturated and not providing the expected output. Saturation is something to be conscious of during the design phase. It should be included in the system model. However, proper design will usually mean that the system operates within only the linear region of a sensor or actuator.
+
+### 2.4 Some Useful Arduino Commands
+
+#### 2.4.1 Map()
+
+As we have seen in several labs so far, when we take analog data we typically must convert the measured ADC value to some other physical value (voltage or resistance for example.) In this lab, we will measure the voltage (and resistance) of a potentiometer and then convert that ADC reading to a pulse width for controlling the displacement of a sensor. The <code>map()</code> function in Arduino does this task for us in only one line of code. For help on the <code>map()</code> function, follow this link: https://www.arduino.cc/en/Reference/Map.
+
+#### 2.4.2 Serial Port Communication
+
+Using the serial port to send data from the Arduino platform to Matlab is a relatively convenient way of gathering data for analysis. We often think of a serial port as a place through which a stream of data follows. There are many types of serial ports, but they all share this basic idea in common. Bits of data are sent along a wire electrically; high voltage is a binary 1 and low voltage is a binary 0. The job of the software is convert these streams of bits into characters (or numbers) that are readable to other
+software and humans. For more on serial ports, here is a link to a Wikipedia article: https://en.wikipedia.org/wiki/Serial_port.
+
+Most computer systems use a standard process for converting the stream of bits into characters. With eight bits, we can make 256 combinations of binary numbers and hence 256 integers. These integers are then mapped to standard characters using the Extended ASCII codes. A bit of history and the ASCII tables can be found here: https://en.wikipedia.org/wiki/ASCII and here https://en.wikipedia.org/wiki/Extended_ASCII. There are other standards for converting bit streams, but they are all based on the same concepts.
+
+In addition to converting bits of data into characters, the software also must convert these characters to integers or floats as needed. This is called type conversion. By default, Arduino sends the data over the stream as “...human readable ASCII text followed by a carriage return character (ASCII 13, or '\r') and a newline character (ASCII 10, or '\n').” https://www.arduino.cc/en/Serial/Println. The Matlab function fscanf() we have been using then requires a format string so it can determine how to interpret the ASCII text. A full list of how to specify the format of the data is here: https://www.mathworks.com/help/matlab/ref/fscanf.html#bt_j35z-3.
+
+Using the format specification, you can now send more than one variable from Arduino to Matlab. For example, the following Arduino and Matlab code will send two floats across the serial port.
+
+<div style="color:black; background:lightblue; border: 1px dashed black">
+
+``` 
+ARDUINO CODE 
+int servoPin = 2; // Define the digital pin number 
+int pulse = 1200; // Define the pulse width in microseconds
+int analogPin = 3; 
+int ADCReading = 0; 
+
+void setup() {
+     Serial.begin(9600); 
+     } 
+     
+void loop() { 
+    ADCReading = analogRead(analogPin); 
+    pulse = 20*ADCReading; 
+    Serial.print(ADCReading); 
+    Serial.print(' '); 
+    Serial.println(pulse); 
+    }
+``` 
+</div>
+
+<p></p>
+
+<div style="color:black; background:lightyellow; border: 1px dashed black">
+
+``` 
+
+MATLAB MAIN CODE 
+    % all the normal serial setup code 
+    % need to set the USB port and address for matlab to query
+    % the main code just calls the function and requests X number of datapoint. 
+    %adjacent code needs to transmit matching X data from the arduino
+
+    %set the number of data points to pull from the serial connection.
+    numDataPoints = 100;
+
+    %save the data into an array.
+    DATA = serial_reader_n(numDataPoints)
+
+    %seperate the data into two arrays
+    %make adjustments to align the data arrays transmitted from arduino
+    % For example if you are transmitting three peices of information X,Y,Z from an arduino sensor. The SERIAL function and MAIN code 
+    time = DATA(1,:);
+    serialdata = DATA(2,:);
+
+
+MATLAB SERIAL READER FUNCTION TO CALL IN MAIN CODE
+
+function [t, data] = serial_reader_n(numDataPoints)
+% Copyright 2014 The MathWorks, Inc.
+% with some modificatIons by Eric Mehiel
+% additional edits performed by SKC
+
+%% Create serial object for Arduino
+if (~isempty(instrfind))
+    fclose(instrfind); % close all ports to start, just to be sure...
+    delete(instrfind);
+end
+
+s = serial('COM3');  % change the COM Port number as needed
+
+%% Connect the serial port to Arduino
+
+try
+    fopen(s);
+catch err
+    fclose(instrfind);
+    delete(instrfind);
+    error('Make sure you select the correct COM Port where the Arduino is connected.');
+end
+
+%% Read  the data from Arduino
+
+i = 0; % counter
+%numDataPoints = 10;
+data = zeros(numDataPoints,1);
+t = zeros(numDataPoints,1);
+
+tempData = fscanf(s); % Clear the serial buffer
+
+timer = tic; % Start timer
+while i < numDataPoints
+    i = i + 1;
+    % Read buffer data
+    disp('Reading Serial Data');
+    data(i,1) = fscanf(s, '%f')'; % Change format string as needed
+    % Read time stamp
+    t(i) = toc(timer);
+end
+fclose(s);
+delete(s);
+clear s;
+``` 
+</div>
