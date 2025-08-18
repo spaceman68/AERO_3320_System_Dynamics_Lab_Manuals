@@ -283,10 +283,25 @@ void setup() {
      
 void loop() { 
     ADCReading = analogRead(analogPin); 
+
+    %calculating the pulse
+
     pulse = 20*ADCReading; 
-    Serial.print(ADCReading); 
-    Serial.print(' '); 
+
+    % Serial.print(ADCReading); 
+    % Serial.print(' '); 
+
     Serial.println(pulse); 
+
+    % This is serial printing one singular value
+    % This can be adjusted to print additional values
+    % FOR EXAMPLE (3 numbers space separated )
+    %  X     Y     Z
+    % 2.35 5.32 10.89
+    % Correspondingly the serial reading function
+    % in matlab also has to be adjusted.
+    
+
     }
 ``` 
 </div>
@@ -297,31 +312,42 @@ void loop() {
 
 ``` 
 
-MATLAB MAIN CODE 
+%MATLAB MAIN CODE 
     % all the normal serial setup code 
     % need to set the USB port and address for matlab to query
-    % the main code just calls the function and requests X number of datapoint. 
-    %adjacent code needs to transmit matching X data from the arduino
+    % the main code just calls the function and requests X number of datapoints. 
+    %adjacent arduino code needs to transmit matching X data from the arduino
 
     %set the number of data points to pull from the serial connection.
+
+
+        %seperate the data into two arrays
+        %make adjustments to align the data arrays
+        %transmitted from arduino
+        
+        %For example if you are transmitting three 
+        %peices of information X,Y,Z from an arduino sensor.
+        % This function would need to be adjusted accordingly.
+        
+        %The SERIAL function and MAIN code 
+
     numDataPoints = 100;
 
     %save the data into an array.
     DATA = serial_reader_n(numDataPoints)
 
-    %seperate the data into two arrays
-    %make adjustments to align the data arrays transmitted from arduino
-    % For example if you are transmitting three peices of information X,Y,Z from an arduino sensor. The SERIAL function and MAIN code 
+    % Saving data
     time = DATA(1,:);
     serialdata = DATA(2,:);
 
 
-MATLAB SERIAL READER FUNCTION TO CALL IN MAIN CODE
+%  MATLAB SERIAL READER FUNCTION TO CALL IN MAIN CODE
 
 function [t, data] = serial_reader_n(numDataPoints)
+
 % Copyright 2014 The MathWorks, Inc.
 % with some modificatIons by Eric Mehiel
-% additional edits performed by SKC
+% additional edits -  SKC
 
 %% Create serial object for Arduino
 if (~isempty(instrfind))
@@ -364,3 +390,87 @@ delete(s);
 clear s;
 ``` 
 </div>
+
+The lines of code at the end of the <code>loop()</code> function do all the work on the Arduino side. Notice, fist the value of the ADC reading is sent to the serial stream, then a single space (literally the space bar), then the value of the pulse variable. When the vaule of the pulse variable is sent, it is sent using the <code>println()</code> command, whereas the other values sent to the stream use the <code>print()</code> command. The <code>println()</code> command prints the values to the stream, but then adds the carriage return and newline characters. These two characters are used by the <code>fscanf()</code> command to know when a new line of data is available. In other words, the <code>fscanf()</code> command waits until the data in the stream ends with a carriage return and a new line character before it reads the value. Notice the <code>fscanf()</code> function now includes the format string <code>‘%e %e’</code>. The function literally uses the fact that there is a space between the two <code>%e’s</code> to know that each number is separated by a space.
+
+## 3 Pre-Lab Assignment
+
+Please complete the following tasks BEFORE your assigned lab start time:
+- Complete the ‘Pre-Lab 3 – Actuators quiz module on the course Canvas Page.
+
+## 4 Lab Activities
+
+### 4.1 Servo Motors
+
+1. Set up the servo motor/potentiometer systems from Figure 9. A potentiometer is basically a pre-built voltage divider.
+
+<figure>
+  <img src="./potentiometer_and_servo.jpeg" alt=POtentiometer and Servo wiring Diagram" width: 100%;
+  height: auto;
+  /* Magic! */
+  max-width: 50vw;>
+  <figcaption>Figure 9. The breadboard view of a potentiometer and servo  </figcaption>
+</figure>
+
+2. Write Arduino platform code to do the following:
+
+    a. Read the analog value of the potentiometer as a raw ADC value,
+
+    b. Map the raw ADC value to a pulse length from 0 to 3000 microseconds,
+
+    c. Command the servo to move based on the pulse width,
+
+    d. Write the raw ADC value and the pulse width value to the serial port.
+3. Using a straight edge, determine the range of pulse widths required to rotate the servo 180 degrees.
+4. Compute the servo motor parameter known as pulse width in microseconds per degree.
+5. If your servo is labeled, confirm your answers for part 3 and 4. If your servo is not labeled, label it with your answers from part 3 and 4.
+
+### 4.2 DC Motors
+
+6. Connect the two DC motors to the L293D chip based on Figure 4. Also connect the HC-SR04 using two additional digital pins.
+7. Write Arduino platform code to do the following:
+
+    a. Write a new function outside of the loop function to measure and return the distance using the HC-SR04 ultrasonic sensor. Map the distance measured to the speed range of the DC motors. The function should look something like:
+
+    b. Write new functions outside of the loop function to command the DC motors to run at the mapped speed from part a. You will also need to write a stop() function as in the tutorial. The function should look something like this:
+
+    c. Send the distance and motor speed to the serial port in 0.1 second intervals.
+8. Test the code from part 6 by moving an object around in front of the ultra-sonic distance sensor. Plot and upload your results.
+
+<div style="color:black; background:lightblue; border: 1px dashed black">
+
+``` 
+ARDUINO CODE 
+
+float getDistance(int trigPin, int echoPin)
+    { 
+        // some code to get distance 
+    }
+``` 
+</div>
+
+<p></p>
+
+<div style="color:black; background:lightblue; border: 1px dashed black">
+
+``` 
+% ARDUINO CODE 
+
+void move(int speed, int direction) 
+{ 
+    // Some code to make the motor spin at some speed in some direction 
+} 
+
+void stop() 
+    { 
+        // some code to stop the motor by disabling the L293D 
+    }
+``` 
+</div>
+
+
+### 4.3 Reflections
+
+9. Is your servo motor rate limited? Why?
+10. What are the saturation limits of your servo? Are these limits hard or soft?
+11. Can you think of a way to use the measured distance from the ultra-sonic sensor to make the cart come to a “gentle” stop?
