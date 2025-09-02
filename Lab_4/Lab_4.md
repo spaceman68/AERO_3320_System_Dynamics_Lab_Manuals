@@ -306,31 +306,34 @@ In this lab you will use a simple library developed to get data from an GY-521 a
 As discussed in Aero 320, the roll angle is a Euler rotation angle about the x-axis of a rigid body. In this case, the accelerometer is the rigid body and in fact, if you look closely at the breakout board, you will see a small set of axes printed on the board. The GY-521 is a MEMS type accelerometer. For more on these sensors, check out this Wikipedia link: https://en.wikipedia.org/wiki/Accelerometer
 
 
-<figure>
+<figure> <p align="center">
   <img src="./GY_521.jpeg" alt=GY-521 Accelerometer" width: 60%;
   height: auto;
   max-width: 50vw;>
   <figcaption>Figure 1. GY-521 Accelerometer  </figcaption>
+  </p>
 </figure>
 
 Connecting the GY-521 to the Arduino platform is very straight forward. The breadboard diagram is shown in Figure 2 which is from a project post on the Arduino website https://create.arduino.cc/projecthub/Nicholas_N/how-to-use-the-accelerometer-gyroscope-gy-521-6dfc19. 
 
 The GY-521 break-out board uses an I2C serial communication bus. The transmit and receive channels are connected to the dedicated SCL and SCA pins on the Arduino. For more on I2C, check out this link: https://en.wikipedia.org/wiki/I%C2%B2C.
 
-<figure>
+<figure> <p align="center">
   <img src="./GY-521_breadboard.jpeg" alt=Breadboard view of connecting the GY-521 Accelerometer" width: 60%;
   height: auto;
   max-width: 50vw;>
   <figcaption>Figure 2. GY-521 Accelerometer  </figcaption>
+  </p>
 </figure>
 
 To find the roll angle of the accelerometer using the gravity vector, we refer to Figure 3 below. The figure is from a report at http://iopscience.iop.org/article/10.1088/0957-0233/26/12/125102.
 
-<figure>
+<figure> <p align="center">
   <img src="./orientation of accel and inertial frames.jpeg" alt=Orientation of Accel and Inertial Frames" width: 60%;
   height: auto;
   max-width: 50vw;>
   <figcaption>Figure 3. Orientation of Accel and Interial Frames  </figcaption>
+  </p>
 </figure>
 
 In our case, the gravity vector points in the $- \overrightarrow{z}-axis$. Noting that $\theta$ is the roll angle, we can deduce,
@@ -353,11 +356,12 @@ In classical control theory, we typically break control goals into two broad are
 
 In this lab you are going to use an accelerometer to get the servo motor arm to maintain a constant orientation relative to the inertial reference frame. A simple block diagram of your system is shown below in Figure 4.
 
-<figure>
+<figure> <p align="center">
   <img src="./simple regulation system.jpeg" alt=simple regulation system" width: 60%;
   height: auto;
   max-width: 50vw;>
   <figcaption>Figure 4. A simple regulation system  </figcaption>
+  </p>
 </figure>
 
 In this case, the measured angle is subtracted from the desired angle to generate an error in the roll angle. Multiplying this error by a constant (and adding an offset) converts the error into a desired pulse width command to the servo. If this measure and command process is repeated over and over in the <code>loop()</code> function of the Arduino, the servo motor arm should maintain a fixed orientation (roll only) in the inertial frame.
